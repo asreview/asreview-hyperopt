@@ -53,6 +53,7 @@ setup(
             "hyper-active = asreviewcontrib.hyperopt:HyperActiveEntryPoint",
             "hyper-inactive = asreviewcontrib.hyperopt:HyperInactiveEntryPoint",  #noqa
             "hyper-cluster = asreviewcontrib.hyperopt:HyperClusterEntryPoint",  #noqa
+            "show = asreviewcontrib.hyperopt:ShowTrialsEntryPoint",
         ]
 
     },
