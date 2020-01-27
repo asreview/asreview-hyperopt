@@ -21,7 +21,7 @@ from asreview.entry_points.base import BaseEntryPoint
 
 
 class ShowTrialsEntryPoint(BaseEntryPoint):
-    description = "Hyper parameter optimization for non-active learning."
+    description = "List trials for hyper parameter optimization."
 
     def __init__(self):
         super(ShowTrialsEntryPoint, self).__init__()
