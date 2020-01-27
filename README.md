@@ -134,6 +134,20 @@ output/
 
 The files with name `trials.pkl` are special files that contain data on which trials were run.
 
+To list these trials, use the following command:
+
+```bash
+asreview show $SOME_DIRECTORY/trials.pkl
+```
+
+It should give a list of trials sorted by the loss (lower is better). The column names (apart
+from the loss) are prefixed with the kind of parameter it is:
+
+- `mdl`: Model parameter
+- `bal`: Balance strategy parameter
+- `qry`: Query strategy parameter
+- `fex`: Feature extraction parameter
+
 ### Options
 
 The default number of iterations is 1, which you'll probably want to increase. It depends on the
