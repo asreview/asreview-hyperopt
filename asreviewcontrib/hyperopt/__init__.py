@@ -17,5 +17,5 @@ from asreviewcontrib.hyperopt.cluster import HyperClusterEntryPoint
 from asreviewcontrib.hyperopt.inactive import HyperInactiveEntryPoint
 from asreviewcontrib.hyperopt.show_trials import ShowTrialsEntryPoint
 
-__version__ = "0.1"
+__version__ = "0.1.1"
 __extension_name__ = "asreview-hyperopt"
