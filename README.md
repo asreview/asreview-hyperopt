@@ -1,5 +1,7 @@
 ## ASReview-hyperopt
 
+![Deploy and release](https://github.com/msdslab/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)
+
 Hyper parameter optimization extension for 
 [ASReview](https://github.com/msdslab/automated-systematic-review). It uses the 
 [hyperopt](https://github.com/hyperopt/hyperopt) package to quickly optimize parameters
@@ -12,7 +14,7 @@ automatically used for hyper parameter optimization.
 The easiest way to install the visualization package is to use the command line:
 
 ``` bash
-pip install git+https://github.com/msdslab/ASReview-visualization.git
+pip install asreview-hyperopt
 ```
 
 After installation of the visualization package, asreview should automatically detect it.
