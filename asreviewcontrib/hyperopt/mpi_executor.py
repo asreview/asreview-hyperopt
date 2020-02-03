@@ -61,7 +61,9 @@ def mpi_executor(all_jobs, job_runner=None, server_job=True):
         n_jobs_sent += 1
 
     for i_proc in range(1, n_proc):
-        comm.recv(source=MPI.ANY_SOURCE)
+        comm.recv(source=MPI.ANY_SOURCE, status=status)
+        pid = status.source
+        comm.send(None, dest=pid)
 
 
 def mpi_hyper_optimize(job_runner, n_iter):
