@@ -33,7 +33,7 @@ def quality(result_list, alpha=1):
 
 
 def get_trial_fp(datasets, model_name=None, query_name=None, balance_name=None,
-                 feature_name=None, hyper_type="inactive"):
+                 feature_name=None, hyper_type="passive"):
 
     name_list = [
         name for name in [model_name, query_name, balance_name, feature_name]

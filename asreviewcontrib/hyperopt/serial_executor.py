@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-def serial_executor(jobs, job_runner):
+def serial_executor(jobs, job_runner, stop_workers=False):
     for job in jobs:
         job_runner.execute(**job)
 

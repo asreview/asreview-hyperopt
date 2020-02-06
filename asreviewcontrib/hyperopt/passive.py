@@ -15,21 +15,21 @@
 import sys
 import argparse
 
+from asreview.entry_points.base import BaseEntryPoint
+
 from asreviewcontrib.hyperopt.mpi_executor import mpi_executor
 from asreviewcontrib.hyperopt.mpi_executor import mpi_hyper_optimize
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
 from asreviewcontrib.hyperopt.serial_executor import serial_hyper_optimize
+from asreviewcontrib.hyperopt.passive_job import PassiveJobRunner
 from asreviewcontrib.hyperopt.job_utils import get_data_names
-from asreviewcontrib.hyperopt.al_job import ActiveLearnJobRunner
-from asreview.entry_points import BaseEntryPoint
 
 
-class HyperActiveEntryPoint(BaseEntryPoint):
-
-    description = "Hyper parameter optimization for active learning."
+class HyperPassiveEntryPoint(BaseEntryPoint):
+    description = "Hyper parameter optimization for non-active learning."
 
     def __init__(self):
-        super(HyperActiveEntryPoint, self).__init__()
+        super(HyperPassiveEntryPoint, self).__init__()
         from asreviewcontrib.hyperopt.__init__ import __version__
         from asreviewcontrib.hyperopt.__init__ import __extension_name__
 
@@ -45,14 +45,8 @@ def _parse_arguments():
     parser.add_argument(
         "-m", "--model",
         type=str,
-        default="nb",
+        default="dense_nn",
         help="Prediction model for active learning."
-    )
-    parser.add_argument(
-        "-q", "--query_strategy",
-        type=str,
-        default="max_random",
-        help="Query strategy for active learning."
     )
     parser.add_argument(
         "-b", "--balance_strategy",
@@ -63,7 +57,7 @@ def _parse_arguments():
     parser.add_argument(
         "-e", "--feature_extraction",
         type=str,
-        default="tfidf",
+        default="doc2vec",
         help="Feature extraction method.")
     parser.add_argument(
         "-n", "--n_iter",
@@ -94,7 +88,6 @@ def main(argv=sys.argv[1:]):
     model_name = args["model"]
     feature_name = args["feature_extraction"]
     balance_name = args["balance_strategy"]
-    query_name = args["query_strategy"]
     n_iter = args["n_iter"]
     use_mpi = args["use_mpi"]
 
@@ -104,10 +97,8 @@ def main(argv=sys.argv[1:]):
     else:
         executor = serial_executor
 
-    job_runner = ActiveLearnJobRunner(
-        data_names, model_name=model_name, query_name=query_name,
-        balance_name=balance_name, feature_name=feature_name,
-        executor=executor)
+    job_runner = PassiveJobRunner(data_names, model_name, balance_name,
+                                  feature_name, executor=executor)
 
     if use_mpi:
         mpi_hyper_optimize(job_runner, n_iter)

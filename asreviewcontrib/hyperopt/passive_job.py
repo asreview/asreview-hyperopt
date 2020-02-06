@@ -25,7 +25,6 @@ from tqdm import tqdm
 from asreview.balance_strategies.utils import get_balance_class
 from asreview.feature_extraction.utils import get_feature_class
 from asreview.models.utils import get_model_class
-from asreview.simulation.serial_executor import serial_executor
 from asreview.readers import ASReviewData
 
 from asreviewcontrib.hyperopt.job_utils import get_trial_fp
@@ -35,15 +34,16 @@ from asreviewcontrib.hyperopt.job_utils import data_fp_from_name
 from asreviewcontrib.hyperopt.job_utils import quality
 from asreviewcontrib.hyperopt.job_utils import get_out_fp
 from asreviewcontrib.hyperopt.job_utils import get_label_fp
+from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 
-class InactiveJobRunner():
+class PassiveJobRunner():
     def __init__(self, data_names, model_name, balance_name, feature_name,
                  executor=serial_executor, n_run=10):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
-            featurename=feature_name, hyper_type="inactive")
+            feature_name=feature_name, hyper_type="passive")
 
         self.model_class = get_model_class(model_name)
         self.feature_class = get_feature_class(feature_name)
@@ -60,7 +60,7 @@ class InactiveJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self)
+            self.executor(jobs, self, stop_workers=False)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)

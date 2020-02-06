@@ -23,7 +23,6 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.cluster import KMeans
 
-from asreview.simulation.serial_executor import serial_executor
 from asreview.readers import ASReviewData
 from asreview.feature_extraction.utils import get_feature_class
 from asreview.cluster import normalized_cluster_score
@@ -33,6 +32,7 @@ from asreviewcontrib.hyperopt.job_utils import get_split_param
 from asreviewcontrib.hyperopt.job_utils import data_fp_from_name
 from asreviewcontrib.hyperopt.job_utils import get_label_fp
 from asreviewcontrib.hyperopt.job_utils import get_out_fp
+from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 
 class ClusterJobRunner():
@@ -56,7 +56,7 @@ class ClusterJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_feature_run)
 
-            self.executor(jobs, self)
+            self.executor(jobs, self, stop_workers=False)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)
