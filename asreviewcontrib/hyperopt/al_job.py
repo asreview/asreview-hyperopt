@@ -67,7 +67,7 @@ class ActiveLearnJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self)
+            self.executor(jobs, self, stop_workers=False)
             losses = []
             for data_name in self.data_names:
                 data_dir = os.path.join(self.trials_dir, 'current', data_name)

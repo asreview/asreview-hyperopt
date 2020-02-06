@@ -27,7 +27,8 @@ def mpi_worker(job_runner):
     return None, None
 
 
-def mpi_executor(all_jobs, job_runner=None, server_job=True):
+def mpi_executor(all_jobs, job_runner=None, server_job=True,
+                 stop_workers=True):
     comm = MPI.COMM_WORLD
     n_proc = comm.Get_size()
 
@@ -63,7 +64,8 @@ def mpi_executor(all_jobs, job_runner=None, server_job=True):
     for i_proc in range(1, n_proc):
         comm.recv(source=MPI.ANY_SOURCE, status=status)
         pid = status.source
-        comm.send(None, dest=pid)
+        if stop_workers:
+            comm.send(None, dest=pid)
 
 
 def mpi_hyper_optimize(job_runner, n_iter):
@@ -71,5 +73,7 @@ def mpi_hyper_optimize(job_runner, n_iter):
     rank = comm.Get_rank()
     if rank == 0:
         job_runner.hyper_optimize(n_iter)
+        for pid in range(1, comm.Get_size()):
+            comm.send(None, dest=pid)
     else:
         mpi_worker(job_runner)
