@@ -43,7 +43,7 @@ class InactiveJobRunner():
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
-            featurename=feature_name, hyper_type="inactive")
+            feature_name=feature_name, hyper_type="inactive")
 
         self.model_class = get_model_class(model_name)
         self.feature_class = get_feature_class(feature_name)
@@ -60,7 +60,7 @@ class InactiveJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self)
+            self.executor(jobs, self, stop_workers=False)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)

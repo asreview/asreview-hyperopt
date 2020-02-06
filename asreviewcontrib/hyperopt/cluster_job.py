@@ -56,7 +56,7 @@ class ClusterJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_feature_run)
 
-            self.executor(jobs, self)
+            self.executor(jobs, self, stop_workers=False)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)
