@@ -51,7 +51,7 @@ setup(
     entry_points={
         "asreview.entry_points": [
             "hyper-active = asreviewcontrib.hyperopt:HyperActiveEntryPoint",
-            "hyper-inactive = asreviewcontrib.hyperopt:HyperInactiveEntryPoint",  #noqa
+            "hyper-passive = asreviewcontrib.hyperopt:HyperPassiveEntryPoint",  #noqa
             "hyper-cluster = asreviewcontrib.hyperopt:HyperClusterEntryPoint",  #noqa
             "show = asreviewcontrib.hyperopt:ShowTrialsEntryPoint",
         ]
