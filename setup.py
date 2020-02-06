@@ -21,7 +21,7 @@ setup(
     description='Hyper parameter optimization extension for ASReview',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/msdslab/ASReview-hyperopt',
+    url='https://github.com/asreview/asreview-hyperopt',
     author='Utrecht University',
     author_email='asreview@uu.nl',
     classifiers=[
@@ -60,8 +60,8 @@ setup(
 
     project_urls={
         'Bug Reports':
-            "https://github.com/msdslab/ASReview-hyperopt/issues",
+            "https://github.com/asreview/asreview-hyperopt/issues",
         'Source':
-            "https://github.com/msdslab/ASReview-hyperopt",
+            "https://github.com/asreview/asreview-hyperopt",
     },
 )

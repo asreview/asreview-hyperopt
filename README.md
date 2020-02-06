@@ -3,10 +3,10 @@
 ![Deploy and release](https://github.com/msdslab/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)
 
 Hyper parameter optimization extension for 
-[ASReview](https://github.com/msdslab/automated-systematic-review). It uses the 
+[ASReview](https://github.com/asreview/asreview). It uses the 
 [hyperopt](https://github.com/hyperopt/hyperopt) package to quickly optimize parameters
 of the different models. The hyper parameters and their sample space are defined in the
-[ASReview](https://github.com/msdslab/automated-systematic-review) package, and 
+[ASReview](https://github.com/asreview/asreview) package, and 
 automatically used for hyper parameter optimization.
 
 ### Installation
