@@ -35,7 +35,7 @@ from asreviewcontrib.hyperopt.job_utils import data_fp_from_name
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 
-class ActiveLearnJobRunner():
+class ActiveJobRunner():
     def __init__(self, data_names, model_name, query_name, balance_name,
                  feature_name, executor=serial_executor,
                  n_run=8, n_papers=1502, n_instances=50, n_included=1,
@@ -44,7 +44,7 @@ class ActiveLearnJobRunner():
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
             query_name=query_name, feature_name=feature_name,
-            hyper_type="active_learning")
+            hyper_type="active")
 
         self.feature_name = feature_name
         self.balance_name = balance_name

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from asreviewcontrib.hyperopt.active_learning import HyperActiveEntryPoint
+from asreviewcontrib.hyperopt.active import HyperActiveEntryPoint
 from asreviewcontrib.hyperopt.cluster import HyperClusterEntryPoint
-from asreviewcontrib.hyperopt.inactive import HyperInactiveEntryPoint
+from asreviewcontrib.hyperopt.passive import HyperPassiveEntryPoint
 from asreviewcontrib.hyperopt.show_trials import ShowTrialsEntryPoint
 
 __version__ = "0.1.2"

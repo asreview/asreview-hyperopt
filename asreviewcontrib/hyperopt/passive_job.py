@@ -37,13 +37,13 @@ from asreviewcontrib.hyperopt.job_utils import get_label_fp
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 
-class InactiveJobRunner():
+class PassiveJobRunner():
     def __init__(self, data_names, model_name, balance_name, feature_name,
                  executor=serial_executor, n_run=10):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
-            feature_name=feature_name, hyper_type="inactive")
+            feature_name=feature_name, hyper_type="passive")
 
         self.model_class = get_model_class(model_name)
         self.feature_class = get_feature_class(feature_name)
