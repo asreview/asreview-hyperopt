@@ -24,7 +24,7 @@ Test this by:
 asreview --help
 ```
 
-It should list three new entry points: `hyper-active`, `hyper-inactive` and `hyper-cluster`.
+It should list three new entry points: `hyper-active`, `hyper-passive` and `hyper-cluster`.
 
 ### Basic usage
 
@@ -32,7 +32,7 @@ The three entry-points are used in a roughly similar fashion. The main differenc
 the types of models that have to be supplied:
 
 - hyper-cluster: feature_extraction
-- hyper-inactive: model, balance\_strategy, feature\_extraction
+- hyper-passive: model, balance\_strategy, feature\_extraction
 - hyper-active: model, balance\_strategy, query\_strategy, feature\_extraction
 
 
@@ -124,7 +124,7 @@ output/
 │       └── nagtegaal
 │           └── current
 │               └── nagtegaal
-└── inactive
+└── passive
     └── nb_double_tfidf
         └── depression
             ├── best
