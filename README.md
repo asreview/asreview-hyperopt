@@ -165,3 +165,16 @@ mpirun -n 4 asreview hyper-active
 ```
 
 On super computers one should sometimes replace `mpirun` with `srun`.
+
+
+### Time measurements:
+
+#### inactive
+
+nb, tfidf, double, max -> 53 seconds
+svm, tfidf, double, max -> 1940 seconds
+rf, tfidf, double, max -> 80 seconds
+logistic, tfidf, double, max -> 250 seconds /4
+dense_nn, tfidf, double, max -> ?
+dense_nn, doc2vec, double, max ->  2750 seconds /1, /2
+svm, doc2vec, ...

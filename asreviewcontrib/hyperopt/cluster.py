@@ -66,6 +66,12 @@ def _parse_arguments():
         action='store_true',
         help="Use the mpi implementation.",
     )
+    parser.add_argument(
+        "-r", "--n_run",
+        type=int,
+        default=8,
+        help="Number of runs per dataset."
+    )
     return parser
 
 
@@ -76,6 +82,7 @@ def main(argv=sys.argv[1:]):
     feature_name = args["feature_extraction"]
     n_iter = args["n_iter"]
     use_mpi = args["use_mpi"]
+    n_run = args["n_run"]
 
     data_names = get_data_names(datasets)
     if use_mpi:
@@ -83,7 +90,8 @@ def main(argv=sys.argv[1:]):
     else:
         executor = serial_executor
 
-    job_runner = ClusterJobRunner(data_names, feature_name, executor=executor)
+    job_runner = ClusterJobRunner(data_names, feature_name, executor=executor,
+                                  n_cluster_run=n_run)
 
     if use_mpi:
         mpi_hyper_optimize(job_runner, n_iter)
