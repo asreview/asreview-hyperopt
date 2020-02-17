@@ -72,6 +72,12 @@ def _parse_arguments():
         help="Number of iterations of Bayesian Optimization."
     )
     parser.add_argument(
+        "-r", "--n_run",
+        type=int,
+        default=8,
+        help="Number of runs per dataset."
+    )
+    parser.add_argument(
         "-d", "--datasets",
         type=str,
         default="all",
@@ -97,6 +103,7 @@ def main(argv=sys.argv[1:]):
     query_name = args["query_strategy"]
     n_iter = args["n_iter"]
     use_mpi = args["use_mpi"]
+    n_run = args["n_run"]
 
     data_names = get_data_names(datasets)
     if use_mpi:
@@ -107,7 +114,7 @@ def main(argv=sys.argv[1:]):
     job_runner = ActiveJobRunner(
         data_names, model_name=model_name, query_name=query_name,
         balance_name=balance_name, feature_name=feature_name,
-        executor=executor)
+        executor=executor, n_run=n_run)
 
     if use_mpi:
         mpi_hyper_optimize(job_runner, n_iter)

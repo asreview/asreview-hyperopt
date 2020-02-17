@@ -33,6 +33,7 @@ from asreviewcontrib.hyperopt.job_utils import get_trial_fp
 from asreviewcontrib.hyperopt.job_utils import get_split_param
 from asreviewcontrib.hyperopt.job_utils import data_fp_from_name
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
+from os.path import isfile
 
 
 class ActiveJobRunner():
@@ -148,6 +149,18 @@ class ActiveJobRunner():
             n_start_evals = 0
         else:
             n_start_evals = len(trials.trials)
+
+        try:
+            current_dir = os.path.join(self.trials_dir, "current")
+            for data_name in os.listdir(current_dir):
+                data_dir = os.path.join(current_dir, data_name)
+                result_files = [os.path.join(data_dir, f)
+                                for f in os.listdir(data_dir)]
+                for res_file in result_files:
+                    if isfile(res_file):
+                        os.remove(res_file)
+        except FileNotFoundError:
+            pass
 
         for i in tqdm(range(n_iter)):
             fmin(fn=obj_function,
