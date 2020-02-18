@@ -42,6 +42,7 @@ class ClusterJobRunner():
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, feature_name=feature_name, hyper_type="cluster")
 
+        self.feature_name = feature_name
         self.feature_class = get_feature_class(feature_name)
 
         self.data_names = data_names
@@ -111,7 +112,8 @@ class ClusterJobRunner():
 
         try:
             with open(self.trials_fp, "rb") as fp:
-                trials, _ = pickle.load(fp)
+                trials_data = pickle.load(fp)
+            trials = trials_data["trials"]
         except FileNotFoundError:
             trials = None
             print(f"Creating new hyper parameter optimization run: "
@@ -130,8 +132,13 @@ class ClusterJobRunner():
                  max_evals=i+n_start_evals+1,
                  trials=trials,
                  show_progressbar=False)
+            trials_data = {
+                "trials": trials,
+                "hyper_choices": hyper_choices,
+                "feature_name": self.feature_name,
+            }
             with open(self.trials_fp, "wb") as fp:
-                pickle.dump((trials, hyper_choices), fp)
+                pickle.dump(trials_data, fp)
             if trials.best_trial['tid'] == len(trials.trials)-1:
                 copy_tree(os.path.join(self.trials_dir, "current"),
                           os.path.join(self.trials_dir, "best"))

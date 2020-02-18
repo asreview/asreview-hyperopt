@@ -45,6 +45,10 @@ class PassiveJobRunner():
             data_names, model_name=model_name, balance_name=balance_name,
             feature_name=feature_name, hyper_type="passive")
 
+        self.model_name = model_name
+        self.balance_name = balance_name
+        self.feature_name = feature_name
+
         self.model_class = get_model_class(model_name)
         self.feature_class = get_feature_class(feature_name)
         self.balance_class = get_balance_class(balance_name)
@@ -134,7 +138,8 @@ class PassiveJobRunner():
 
         try:
             with open(self.trials_fp, "rb") as fp:
-                trials, _ = pickle.load(fp)
+                trials_data = pickle.load(fp)
+            trials = trials_data["trials"]
         except FileNotFoundError:
             trials = None
             print(f"Creating new hyper parameter optimization run: "
@@ -153,8 +158,15 @@ class PassiveJobRunner():
                  max_evals=i+n_start_evals+1,
                  trials=trials,
                  show_progressbar=False)
+            trials_data = {
+                "trials": trials,
+                "hyper_choices": hyper_choices,
+                "model_name": self.model_name,
+                "balance_name": self.balance_name,
+                "feature_name": self.feature_name,
+            }
             with open(self.trials_fp, "wb") as fp:
-                pickle.dump((trials, hyper_choices), fp)
+                pickle.dump(trials_data, fp)
             if trials.best_trial['tid'] == len(trials.trials)-1:
                 copy_tree(os.path.join(self.trials_dir, "current"),
                           os.path.join(self.trials_dir, "best"))
