@@ -14,6 +14,7 @@
 
 import sys
 import argparse
+import logging
 
 from asreviewcontrib.hyperopt.mpi_executor import mpi_executor
 from asreviewcontrib.hyperopt.mpi_executor import mpi_hyper_optimize
@@ -37,6 +38,7 @@ class HyperActiveEntryPoint(BaseEntryPoint):
         self.version = __version__
 
     def execute(self, argv):
+        logging.getLogger().setLevel(logging.ERROR)
         main(argv)
 
 

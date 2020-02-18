@@ -14,6 +14,7 @@ import sys
 # limitations under the License.
 
 import argparse
+import logging
 
 from asreview.entry_points import BaseEntryPoint
 
@@ -37,6 +38,7 @@ class HyperClusterEntryPoint(BaseEntryPoint):
         self.version = __version__
 
     def execute(self, argv):
+        logging.getLogger().setLevel(logging.ERROR)
         main(argv)
 
 
