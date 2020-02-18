@@ -16,6 +16,7 @@ from asreviewcontrib.hyperopt.active import HyperActiveEntryPoint
 from asreviewcontrib.hyperopt.cluster import HyperClusterEntryPoint
 from asreviewcontrib.hyperopt.passive import HyperPassiveEntryPoint
 from asreviewcontrib.hyperopt.show_trials import ShowTrialsEntryPoint
+from asreviewcontrib.hyperopt.create_config import CreateConfigEntryPoint
 
 __version__ = "0.1.2"
 __extension_name__ = "asreview-hyperopt"

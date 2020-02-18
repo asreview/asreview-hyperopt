@@ -36,11 +36,11 @@ class ShowTrialsEntryPoint(BaseEntryPoint):
             trials_fp = argv[0]
         except IndexError:
             print("Error: need argument path to trials.pkl file.")
-        hyper_choices = {}
         with open(trials_fp, "rb") as fp:
-            trials = pickle.load(fp)
-        if isinstance(trials, tuple):
-            trials, hyper_choices = trials
+            trials_data = pickle.load(fp)
+
+        trials = trials_data["trials"]
+        hyper_choices = trials_data["hyper_choices"]
 
         values = deepcopy(trials.vals)
         for key in values:

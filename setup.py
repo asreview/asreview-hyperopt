@@ -54,6 +54,7 @@ setup(
             "hyper-passive = asreviewcontrib.hyperopt:HyperPassiveEntryPoint",  #noqa
             "hyper-cluster = asreviewcontrib.hyperopt:HyperClusterEntryPoint",  #noqa
             "show = asreviewcontrib.hyperopt:ShowTrialsEntryPoint",
+            "create-config = asreviewcontrib.hyperopt:CreateConfigEntryPoint",  #noqa
         ]
 
     },

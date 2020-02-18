@@ -138,7 +138,8 @@ class ActiveJobRunner():
 
         try:
             with open(self.trials_fp, "rb") as fp:
-                trials, _ = pickle.load(fp)
+                trials_data = pickle.load(fp)
+            trials = trials_data["trials"]
         except FileNotFoundError:
             trials = None
             print(f"Creating new hyper parameter optimization run: "
@@ -169,8 +170,16 @@ class ActiveJobRunner():
                  max_evals=i+n_start_evals+1,
                  trials=trials,
                  show_progressbar=False)
+            trials_data = {
+                "trials": trials,
+                "hyper_choices": hyper_choices,
+                "model_name": self.model_name,
+                "balance_name": self.balance_name,
+                "feature_name": self.feature_name,
+                "query_name": self.query_name,
+            }
             with open(self.trials_fp, "wb") as fp:
-                pickle.dump((trials, hyper_choices), fp)
+                pickle.dump(trials_data, fp)
             if trials.best_trial['tid'] == len(trials.trials)-1:
                 copy_tree(os.path.join(self.trials_dir, "current"),
                           os.path.join(self.trials_dir, "best"))
