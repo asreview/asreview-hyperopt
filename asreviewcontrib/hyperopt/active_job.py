@@ -26,7 +26,7 @@ from asreview.balance_strategies.utils import get_balance_model
 from asreview.feature_extraction.utils import get_feature_model
 from asreview.models.utils import get_model
 from asreview.query_strategies.utils import get_query_model
-from asreview.readers import ASReviewData
+from asreview import ASReviewData
 from asreview.review.factory import get_reviewer
 
 from asreviewcontrib.hyperopt.job_utils import get_trial_fp

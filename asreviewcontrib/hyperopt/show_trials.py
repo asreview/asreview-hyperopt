@@ -12,12 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from copy import deepcopy
 import pickle
 
 import pandas as pd
-from copy import deepcopy
+import numpy as np
 
 from asreview.entry_points.base import BaseEntryPoint
+
+
+def load_trials(trials_fp):
+    with open(trials_fp, "rb") as fp:
+        trials_data = pickle.load(fp)
+
+    trials = trials_data["trials"]
+    hyper_choices = trials_data["hyper_choices"]
+
+    values = deepcopy(trials.vals)
+    for key in values:
+        if key in hyper_choices:
+            for i in range(len(values[key])):
+                values[key][i] = hyper_choices[key][values[key][i]]
+
+    values.update({"loss": trials.losses()})
+
+    for key, arr in values.items():
+        if not isinstance(arr[0], float):
+            continue
+        if np.all(arr-np.array(arr, dtype=int) == 0.0):
+            values[key] = [int(val) for val in arr]
+
+    trials_data["values"] = values
+    return trials_data
 
 
 class ShowTrialsEntryPoint(BaseEntryPoint):
@@ -36,19 +62,7 @@ class ShowTrialsEntryPoint(BaseEntryPoint):
             trials_fp = argv[0]
         except IndexError:
             print("Error: need argument path to trials.pkl file.")
-        with open(trials_fp, "rb") as fp:
-            trials_data = pickle.load(fp)
-
-        trials = trials_data["trials"]
-        hyper_choices = trials_data["hyper_choices"]
-
-        values = deepcopy(trials.vals)
-        for key in values:
-            if key in hyper_choices:
-                for i in range(len(values[key])):
-                    values[key][i] = hyper_choices[key][values[key][i]]
-
-        values.update({"loss": trials.losses()})
+        values = load_trials(trials_fp)["values"]
         pd.options.display.max_rows = 999
         pd.options.display.width = 0
         print(pd.DataFrame(values).sort_values("loss"))

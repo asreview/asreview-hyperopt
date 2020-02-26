@@ -25,7 +25,7 @@ from tqdm import tqdm
 from asreview.balance_strategies.utils import get_balance_class
 from asreview.feature_extraction.utils import get_feature_class
 from asreview.models.utils import get_model_class
-from asreview.readers import ASReviewData
+from asreview import ASReviewData
 
 from asreviewcontrib.hyperopt.job_utils import get_trial_fp
 from asreviewcontrib.hyperopt.job_utils import get_split_param

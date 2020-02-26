@@ -23,7 +23,7 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.cluster import KMeans
 
-from asreview.readers import ASReviewData
+from asreview import ASReviewData
 from asreview.feature_extraction.utils import get_feature_class
 from asreview.cluster import normalized_cluster_score
 

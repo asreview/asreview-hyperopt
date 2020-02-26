@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pickle
-from copy import deepcopy
 from configparser import ConfigParser
 import sys
 
@@ -21,6 +19,7 @@ import numpy as np
 
 from asreview.entry_points.base import BaseEntryPoint
 import argparse
+from asreviewcontrib.hyperopt.show_trials import load_trials
 
 
 PREFIX_VALUES = {
@@ -53,28 +52,18 @@ class CreateConfigEntryPoint(BaseEntryPoint):
         parser = _parse_arguments()
         args = vars(parser.parse_args(argv))
         trials_fp = args["trials_fp"]
-        with open(trials_fp, "rb") as fp:
-            trials_data = pickle.load(fp)
+        trials_data = load_trials(trials_fp)
 
-        trials = trials_data["trials"]
-        hyper_choices = trials_data["hyper_choices"]
+        values = trials_data["values"]
         with_config = args["with_config"]
         output = args["output"]
-
-        values = deepcopy(trials.vals)
-        for key in values:
-            if key in hyper_choices:
-                for i in range(len(values[key])):
-                    values[key][i] = hyper_choices[key][values[key][i]]
-
-        values.update({"loss": trials.losses()})
 
         config = ConfigParser()
         if with_config is not None:
             config.read(with_config)
         else:
             config["global_settings"] = DEFAULT_CONFIG_GLOBALS
-        min_idx = np.argmin(trials.losses())
+        min_idx = np.argmin(values["loss"])
 
         if "global_settings" not in config:
             config["global_settings"] = {}
