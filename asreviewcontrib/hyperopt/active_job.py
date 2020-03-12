@@ -93,7 +93,7 @@ class ActiveJobRunner():
             query_strategy=self.query_name, balance_strategy=self.balance_name,
             feature_extraction=self.feature_name, n_instances=self.n_instances,
             n_papers=self.n_papers, log_file=log_file,
-            start_idx=start_idx,
+            prior_idx=start_idx,
             **split_param)
 
         reviewer.review()
