@@ -85,8 +85,7 @@ class ActiveJobRunner():
         except FileNotFoundError:
             pass
 
-        prior_included, prior_excluded = self.get_cached_priors(
-            data_name, i_run)
+        start_idx = self.get_cached_priors(data_name, i_run)
 
         reviewer = get_reviewer(
             data_fp_from_name(self.data_dir, data_name),
@@ -94,7 +93,7 @@ class ActiveJobRunner():
             query_strategy=self.query_name, balance_strategy=self.balance_name,
             feature_extraction=self.feature_name, n_instances=self.n_instances,
             n_papers=self.n_papers, log_file=log_file,
-            prior_included=prior_included, prior_excluded=prior_excluded,
+            start_idx=start_idx,
             **split_param)
 
         reviewer.review()
@@ -117,9 +116,9 @@ class ActiveJobRunner():
         zeros = np.where(as_data.labels == 0)[0]
         included = np.random.choice(ones, self.n_included, replace=False)
         excluded = np.random.choice(zeros, self.n_excluded, replace=False)
-        self._cache[data_name]["priors"][i_run] = (included, excluded)
+        self._cache[data_name]["priors"][i_run] = np.append(included, excluded)
 
-        return included, excluded
+        return self._cache[data_name]["priors"][i_run]
 
     def get_hyper_space(self):
         model_hs, model_hc = get_model(self.model_name).hyper_space()
