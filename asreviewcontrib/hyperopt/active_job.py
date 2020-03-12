@@ -40,7 +40,7 @@ class ActiveJobRunner():
     def __init__(self, data_names, model_name, query_name, balance_name,
                  feature_name, executor=serial_executor,
                  n_run=8, n_papers=1502, n_instances=50, n_included=1,
-                 n_excluded=1):
+                 n_excluded=1, server_job=False):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
@@ -60,6 +60,7 @@ class ActiveJobRunner():
         self.n_included = n_included
         self.n_excluded = n_excluded
 
+        self.server_job = server_job
         self.data_dir = "data"
         self._cache = {data_name: {"priors": {}}
                        for data_name in data_names}
@@ -68,7 +69,8 @@ class ActiveJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self, stop_workers=False)
+            self.executor(jobs, self, stop_workers=False,
+                          server_job=self.server_job)
             losses = []
             for data_name in self.data_names:
                 data_dir = os.path.join(self.trials_dir, 'current', data_name)
@@ -79,22 +81,21 @@ class ActiveJobRunner():
 
     def execute(self, param, data_name, i_run):
         split_param = get_split_param(param)
-        log_file = get_log_file_name(self.trials_dir, data_name, i_run)
+        state_file = get_state_file_name(self.trials_dir, data_name, i_run)
         try:
-            os.remove(log_file)
+            os.remove(state_file)
         except FileNotFoundError:
             pass
 
-        prior_included, prior_excluded = self.get_cached_priors(
-            data_name, i_run)
+        start_idx = self.get_cached_priors(data_name, i_run)
 
         reviewer = get_reviewer(
             data_fp_from_name(self.data_dir, data_name),
             mode='simulate', model=self.model_name,
             query_strategy=self.query_name, balance_strategy=self.balance_name,
             feature_extraction=self.feature_name, n_instances=self.n_instances,
-            n_papers=self.n_papers, log_file=log_file,
-            prior_included=prior_included, prior_excluded=prior_excluded,
+            n_papers=self.n_papers, state_file=state_file,
+            prior_idx=start_idx,
             **split_param)
 
         reviewer.review()
@@ -117,9 +118,9 @@ class ActiveJobRunner():
         zeros = np.where(as_data.labels == 0)[0]
         included = np.random.choice(ones, self.n_included, replace=False)
         excluded = np.random.choice(zeros, self.n_excluded, replace=False)
-        self._cache[data_name]["priors"][i_run] = (included, excluded)
+        self._cache[data_name]["priors"][i_run] = np.append(included, excluded)
 
-        return included, excluded
+        return self._cache[data_name]["priors"][i_run]
 
     def get_hyper_space(self):
         model_hs, model_hc = get_model(self.model_name).hyper_space()
@@ -210,6 +211,6 @@ def create_jobs(param, data_names, n_run):
     return jobs
 
 
-def get_log_file_name(trials_dir, data_name, i_run):
+def get_state_file_name(trials_dir, data_name, i_run):
     return os.path.join(trials_dir, "current", data_name,
                         f"results_{i_run}.h5")

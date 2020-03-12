@@ -92,6 +92,14 @@ def _parse_arguments():
         action='store_true',
         help="Use the mpi implementation.",
     )
+    parser.add_argument(
+        "--server_job",
+        dest='server_job',
+        action='store_true',
+        help='Run job on the server. It will incur less overhead of used CPUs,'
+        ' but more latency of workers waiting for the server to finish its own'
+        ' job. Only makes sense in combination with the flag --mpi.'
+    )
     return parser
 
 
@@ -106,6 +114,7 @@ def main(argv=sys.argv[1:]):
     n_iter = args["n_iter"]
     use_mpi = args["use_mpi"]
     n_run = args["n_run"]
+    server_job = args["server_job"]
 
     data_names = get_data_names(datasets)
     if use_mpi:
@@ -116,7 +125,7 @@ def main(argv=sys.argv[1:]):
     job_runner = ActiveJobRunner(
         data_names, model_name=model_name, query_name=query_name,
         balance_name=balance_name, feature_name=feature_name,
-        executor=executor, n_run=n_run)
+        executor=executor, n_run=n_run, server_job=server_job)
 
     if use_mpi:
         mpi_hyper_optimize(job_runner, n_iter)

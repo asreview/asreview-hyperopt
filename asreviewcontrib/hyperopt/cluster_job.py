@@ -37,7 +37,7 @@ from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 class ClusterJobRunner():
     def __init__(self, data_names, feature_name, executor=serial_executor,
-                 n_cluster_run=30, n_feature_run=1):
+                 n_cluster_run=30, n_feature_run=1, server_job=False):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, feature_name=feature_name, hyper_type="cluster")
@@ -50,6 +50,7 @@ class ClusterJobRunner():
         self.n_cluster_run = n_cluster_run
         self.n_feature_run = n_feature_run
         self.data_dir = "data"
+        self.server_job = server_job
         self._cache = {data_name: {}
                        for data_name in data_names}
 
@@ -57,7 +58,8 @@ class ClusterJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_feature_run)
 
-            self.executor(jobs, self, stop_workers=False)
+            self.executor(jobs, self, stop_workers=False,
+                          server_job=self.server_job)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)
