@@ -42,7 +42,7 @@ setup(
     packages=find_namespace_packages(include=['asreviewcontrib.*']),
     namespace_package=["asreview"],
     install_requires=[
-        "asreview>=0.5.0", "numpy", "tqdm", "hyperopt", "sklearn"
+        "asreview>=0.7.0", "numpy", "tqdm", "hyperopt", "sklearn"
     ],
 
     extras_require={
