@@ -80,7 +80,7 @@ def _parse_arguments():
         action='store_true',
         help='Run job on the server. It will incur less overhead of used CPUs,'
         ' but more latency of workers waiting for the server to finish its own'
-        ' job. Only makes sense in combination with the flag --use_mpi.'
+        ' job. Only makes sense in combination with the flag --mpi.'
     )
 
     return parser
