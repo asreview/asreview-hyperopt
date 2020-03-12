@@ -79,9 +79,9 @@ class ActiveJobRunner():
 
     def execute(self, param, data_name, i_run):
         split_param = get_split_param(param)
-        log_file = get_log_file_name(self.trials_dir, data_name, i_run)
+        state_file = get_state_file_name(self.trials_dir, data_name, i_run)
         try:
-            os.remove(log_file)
+            os.remove(state_file)
         except FileNotFoundError:
             pass
 
@@ -92,7 +92,7 @@ class ActiveJobRunner():
             mode='simulate', model=self.model_name,
             query_strategy=self.query_name, balance_strategy=self.balance_name,
             feature_extraction=self.feature_name, n_instances=self.n_instances,
-            n_papers=self.n_papers, log_file=log_file,
+            n_papers=self.n_papers, state_file=state_file,
             prior_idx=start_idx,
             **split_param)
 
@@ -209,6 +209,6 @@ def create_jobs(param, data_names, n_run):
     return jobs
 
 
-def get_log_file_name(trials_dir, data_name, i_run):
+def get_state_file_name(trials_dir, data_name, i_run):
     return os.path.join(trials_dir, "current", data_name,
                         f"results_{i_run}.h5")
