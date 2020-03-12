@@ -27,7 +27,7 @@ def mpi_worker(job_runner):
     return None, None
 
 
-def mpi_executor(all_jobs, job_runner=None, server_job=True,
+def mpi_executor(all_jobs, job_runner=None, server_job=False,
                  stop_workers=True):
     comm = MPI.COMM_WORLD
     n_proc = comm.Get_size()

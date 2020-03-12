@@ -40,7 +40,7 @@ class ActiveJobRunner():
     def __init__(self, data_names, model_name, query_name, balance_name,
                  feature_name, executor=serial_executor,
                  n_run=8, n_papers=1502, n_instances=50, n_included=1,
-                 n_excluded=1):
+                 n_excluded=1, server_job=False):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
@@ -60,6 +60,7 @@ class ActiveJobRunner():
         self.n_included = n_included
         self.n_excluded = n_excluded
 
+        self.server_job = server_job
         self.data_dir = "data"
         self._cache = {data_name: {"priors": {}}
                        for data_name in data_names}
@@ -68,7 +69,8 @@ class ActiveJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self, stop_workers=False)
+            self.executor(jobs, self, stop_workers=False,
+                          server_job=self.server_job)
             losses = []
             for data_name in self.data_names:
                 data_dir = os.path.join(self.trials_dir, 'current', data_name)

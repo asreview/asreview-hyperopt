@@ -39,7 +39,7 @@ from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 class PassiveJobRunner():
     def __init__(self, data_names, model_name, balance_name, feature_name,
-                 executor=serial_executor, n_run=10):
+                 executor=serial_executor, n_run=10, server_job=False):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
@@ -53,6 +53,7 @@ class PassiveJobRunner():
         self.feature_class = get_feature_class(feature_name)
         self.balance_class = get_balance_class(balance_name)
 
+        self.server_job = server_job
         self.data_names = data_names
         self.executor = executor
         self.n_run = n_run
@@ -64,7 +65,8 @@ class PassiveJobRunner():
         def objective_func(param):
             jobs = create_jobs(param, self.data_names, self.n_run)
 
-            self.executor(jobs, self, stop_workers=False)
+            self.executor(jobs, self, stop_workers=False,
+                          server_job=self.server_job)
             losses = []
             for data_name in self.data_names:
                 label_fp = get_label_fp(self.trials_dir, data_name)
