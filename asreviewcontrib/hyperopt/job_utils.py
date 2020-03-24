@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
 import logging
 import os
 from os.path import join, splitext
@@ -24,6 +25,55 @@ def empty_shared():
     }
 
 
+def _base_parse_arguments(prog="hyper-?"):
+    parser = argparse.ArgumentParser(prog=prog)
+    parser.add_argument(
+        "-n", "--n_iter",
+        type=int,
+        default=1,
+        help="Number of iterations of Bayesian Optimization."
+    )
+    parser.add_argument(
+        "-r", "--n_run",
+        type=int,
+        default=8,
+        help="Number of runs per dataset."
+    )
+    parser.add_argument(
+        "-d", "--datasets",
+        type=str,
+        default="all",
+        help="Datasets to use in the hyper parameter optimization "
+        "Separate by commas to use multiple at the same time [default: all].",
+    )
+    parser.add_argument(
+        "--mpi",
+        dest='use_mpi',
+        action='store_true',
+        help="Use the mpi implementation.",
+    )
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        default="data",
+        help="Base directory with data files.",
+    )
+    parser.add_argument(
+        "--output_dir",
+        default=None,
+        help="Output directory for trials."
+    )
+    parser.add_argument(
+        "--server_job",
+        dest='server_job',
+        action='store_true',
+        help='Run job on the server. It will incur less overhead of used CPUs,'
+        ' but more latency of workers waiting for the server to finish its own'
+        ' job. Only makes sense in combination with the flag --mpi.'
+    )
+    return parser
+
+
 def quality(result_list, alpha=1):
     q = 0
     for _, rank in result_list:
@@ -33,7 +83,10 @@ def quality(result_list, alpha=1):
 
 
 def get_trial_fp(datasets, model_name=None, query_name=None, balance_name=None,
-                 feature_name=None, hyper_type="passive"):
+                 feature_name=None, hyper_type="passive", output_dir=None):
+
+    if output_dir is not None:
+        return output_dir, os.path.join(str(output_dir), "trials.pkl")
 
     name_list = [
         name for name in [model_name, query_name, balance_name, feature_name]
@@ -49,7 +102,6 @@ def get_trial_fp(datasets, model_name=None, query_name=None, balance_name=None,
 
 
 def get_data_names(datasets, data_dir="data"):
-    data_dir = "data"
     file_list = os.listdir(data_dir)
     file_list = [file_name for file_name in file_list
                  if file_name.endswith((".csv", ".xlsx", ".ris"))]

@@ -22,7 +22,8 @@ from asreviewcontrib.hyperopt.mpi_executor import mpi_executor
 from asreviewcontrib.hyperopt.mpi_executor import mpi_hyper_optimize
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
 from asreviewcontrib.hyperopt.serial_executor import serial_hyper_optimize
-from asreviewcontrib.hyperopt.job_utils import get_data_names
+from asreviewcontrib.hyperopt.job_utils import get_data_names,\
+    _base_parse_arguments
 from asreviewcontrib.hyperopt.cluster_job import ClusterJobRunner
 
 
@@ -43,46 +44,12 @@ class HyperClusterEntryPoint(BaseEntryPoint):
 
 
 def _parse_arguments():
-    parser = argparse.ArgumentParser(prog=sys.argv[0])
+    parser = _base_parse_arguments("hyper-cluster")
     parser.add_argument(
         "-e", "--feature_extraction",
         type=str,
         default="doc2vec",
         help="Feature extraction method.")
-    parser.add_argument(
-        "-n", "--n_iter",
-        type=int,
-        default=1,
-        help="Number of iterations of Bayesian Optimization."
-    )
-    parser.add_argument(
-        "-d", "--datasets",
-        type=str,
-        default="all",
-        help="Datasets to use in the hyper parameter optimization "
-        "Separate by commas to use multiple at the same time [default: all].",
-    )
-    parser.add_argument(
-        "--mpi",
-        dest='use_mpi',
-        action='store_true',
-        help="Use the mpi implementation.",
-    )
-    parser.add_argument(
-        "-r", "--n_run",
-        type=int,
-        default=8,
-        help="Number of runs per dataset."
-    )
-    parser.add_argument(
-        "--server_job",
-        dest='server_job',
-        action='store_true',
-        help='Run job on the server. It will incur less overhead of used CPUs,'
-        ' but more latency of workers waiting for the server to finish its own'
-        ' job. Only makes sense in combination with the flag --mpi.'
-    )
-
     return parser
 
 
@@ -95,15 +62,19 @@ def main(argv=sys.argv[1:]):
     use_mpi = args["use_mpi"]
     n_run = args["n_run"]
     server_job = args["server_job"]
+    data_dir = args["data_dir"]
+    output_dir = args["output_dir"]
 
-    data_names = get_data_names(datasets)
+    data_names = get_data_names(datasets, data_dir=data_dir)
     if use_mpi:
         executor = mpi_executor
     else:
         executor = serial_executor
 
-    job_runner = ClusterJobRunner(data_names, feature_name, executor=executor,
-                                  n_cluster_run=n_run, server_job=server_job)
+    job_runner = ClusterJobRunner(
+        data_names, feature_name, executor=executor,
+        n_cluster_run=n_run, server_job=server_job,
+        data_dir=data_dir, output_dir=output_dir)
 
     if use_mpi:
         mpi_hyper_optimize(job_runner, n_iter)
