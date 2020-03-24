@@ -8,8 +8,6 @@ import numpy as np
 from asreviewcontrib.hyperopt.active import main
 from asreviewcontrib.hyperopt.show_trials import load_trials
 
-data_dir = Path("tests", "data")
-base_output_dir = Path("tests", "temp")
 
 
 def remove_dir(output_dir):
@@ -50,7 +48,11 @@ def remove_dir(output_dir):
         ("svm", "tfidf", "uncertainty_max", "simple"),
     ]
 )
-def test_active(model, feature_extraction, query_strategy, balance_strategy):
+def test_active(request, model, feature_extraction, query_strategy,
+                balance_strategy):
+    test_dir = request.fspath.dirname
+    data_dir = Path(test_dir, "data")
+    base_output_dir = Path(test_dir, "temp")
     output_dir = os.path.join(str(base_output_dir), f"active_{model}")
     args = ["--model", model,
             "--feature_extraction", feature_extraction,

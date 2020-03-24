@@ -8,9 +8,6 @@ import numpy as np
 from asreviewcontrib.hyperopt.cluster import main
 from asreviewcontrib.hyperopt.show_trials import load_trials
 
-data_dir = Path("tests", "data")
-base_output_dir = Path("tests", "temp")
-
 
 def remove_dir(output_dir):
     files = [
@@ -49,7 +46,10 @@ def remove_dir(output_dir):
         "doc2vec",
     ]
 )
-def test_passive(feature_extraction):
+def test_passive(request, feature_extraction):
+    test_dir = request.fspath.dirname
+    data_dir = Path(test_dir, "data")
+    base_output_dir = Path(test_dir, "temp")
     output_dir = os.path.join(str(base_output_dir),
                               f"fex_{feature_extraction}")
     args = ["--feature_extraction", feature_extraction,
