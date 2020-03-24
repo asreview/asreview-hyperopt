@@ -50,7 +50,8 @@ def remove_dir(output_dir):
     ]
 )
 def test_passive(feature_extraction):
-    output_dir = os.path.join(str(base_output_dir), feature_extraction)
+    output_dir = os.path.join(str(base_output_dir),
+                              f"fex_{feature_extraction}")
     args = ["--feature_extraction", feature_extraction,
             "--data_dir", str(data_dir),
             "--n_run", "2",

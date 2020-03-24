@@ -51,7 +51,7 @@ def remove_dir(output_dir):
     ]
 )
 def test_active(model, feature_extraction, query_strategy, balance_strategy):
-    output_dir = os.path.join(str(base_output_dir), model)
+    output_dir = os.path.join(str(base_output_dir), f"active_{model}")
     args = ["--model", model,
             "--feature_extraction", feature_extraction,
             "--query_strategy", query_strategy,

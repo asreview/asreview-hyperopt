@@ -53,7 +53,7 @@ def remove_dir(output_dir):
     ]
 )
 def test_passive(model, feature_extraction, balance_strategy):
-    output_dir = os.path.join(str(base_output_dir), model)
+    output_dir = os.path.join(str(base_output_dir), f"passive_{model}")
     args = ["--model", model,
             "--feature_extraction", feature_extraction,
             "--balance_strategy", balance_strategy,

@@ -18,8 +18,6 @@ import logging
 
 from asreview.entry_points.base import BaseEntryPoint
 
-from asreviewcontrib.hyperopt.mpi_executor import mpi_executor
-from asreviewcontrib.hyperopt.mpi_executor import mpi_hyper_optimize
 from asreviewcontrib.hyperopt.serial_executor import serial_executor
 from asreviewcontrib.hyperopt.serial_executor import serial_hyper_optimize
 from asreviewcontrib.hyperopt.passive_job import PassiveJobRunner
@@ -81,6 +79,7 @@ def main(argv=sys.argv[1:]):
 
     data_names = get_data_names(datasets, data_dir=data_dir)
     if use_mpi:
+        from asreviewcontrib.hyperopt.mpi_executor import mpi_executor
         executor = mpi_executor
     else:
         executor = serial_executor
@@ -92,6 +91,7 @@ def main(argv=sys.argv[1:]):
         output_dir=output_dir)
 
     if use_mpi:
+        from asreviewcontrib.hyperopt.mpi_executor import mpi_hyper_optimize
         mpi_hyper_optimize(job_runner, n_iter)
     else:
         serial_hyper_optimize(job_runner, n_iter)
