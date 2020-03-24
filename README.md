@@ -11,7 +11,7 @@ automatically used for hyper parameter optimization.
 
 ### Installation
 
-The easiest way to install the visualization package is to use the command line:
+The easiest way to install the hyper parameter optimization package is to use the command line:
 
 ``` bash
 pip install asreview-hyperopt
@@ -45,15 +45,29 @@ asreview hyper-active --help
 Which results in the following options:
 
 ```bash
-usage: /Users/qubix/Library/Python/3.6/bin/asreview [-h] [-m MODEL]
-                                                    [-q QUERY_STRATEGY]
-                                                    [-b BALANCE_STRATEGY]
-                                                    [-e FEATURE_EXTRACTION]
-                                                    [-n N_ITER] [-d DATASETS]
-                                                    [--mpi]
+usage: hyper-active [-h] [-n N_ITER] [-r N_RUN] [-d DATASETS] [--mpi]
+                    [--data_dir DATA_DIR] [--output_dir OUTPUT_DIR]
+                    [--server_job] [-m MODEL] [-q QUERY_STRATEGY]
+                    [-b BALANCE_STRATEGY] [-e FEATURE_EXTRACTION]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -n N_ITER, --n_iter N_ITER
+                        Number of iterations of Bayesian Optimization.
+  -r N_RUN, --n_run N_RUN
+                        Number of runs per dataset.
+  -d DATASETS, --datasets DATASETS
+                        Datasets to use in the hyper parameter optimization
+                        Separate by commas to use multiple at the same time
+                        [default: all].
+  --mpi                 Use the mpi implementation.
+  --data_dir DATA_DIR   Base directory with data files.
+  --output_dir OUTPUT_DIR
+                        Output directory for trials.
+  --server_job          Run job on the server. It will incur less overhead of
+                        used CPUs, but more latency of workers waiting for the
+                        server to finish its own job. Only makes sense in
+                        combination with the flag --mpi.
   -m MODEL, --model MODEL
                         Prediction model for active learning.
   -q QUERY_STRATEGY, --query_strategy QUERY_STRATEGY
@@ -62,22 +76,16 @@ optional arguments:
                         Balance strategy for active learning.
   -e FEATURE_EXTRACTION, --feature_extraction FEATURE_EXTRACTION
                         Feature extraction method.
-  -n N_ITER, --n_iter N_ITER
-                        Number of iterations of Bayesian Optimization.
-  -d DATASETS, --datasets DATASETS
-                        Datasets to use in the hyper parameter optimization
-                        Separate by commas to use multiple at the same time
-                        [default: all].
-  --mpi                 Use the mpi implementation.
 
 ```
 
 ### Data structure
 
-The extension will search for datasets in the `data` directory, relative to the current
-working directory, so put your datasets there.
+The extension will by default search for datasets in the `data` directory, relative to the current
+working directory. Either put your datasets there, or specify and data directory.
 
-The output of the runs will be stored in the `output` directory, again relative to the current path.
+The output of the runs will by default be stored in the `output` directory, relative to
+the current path.
 
 An example of a structure that has been created:
 
@@ -161,20 +169,14 @@ The hyperopt extension has built-in support for MPI. MPI is used for paralleliza
 a local PC with an MPI-implementation (like OpenMPI) installed, one could run with 4 cores:
 
 ```bash
-mpirun -n 4 asreview hyper-active
+mpirun -n 4 asreview hyper-active --mpi
+```
+
+If you want to be slightly more efficient on a machine with a low number of cores, you can run
+jobs on the MPI server as well:
+
+```bash
+mpirun -n 4 asreview hyper-active --mpi --server_job
 ```
 
 On super computers one should sometimes replace `mpirun` with `srun`.
-
-
-### Time measurements:
-
-#### inactive
-
-nb, tfidf, double, max -> 53 seconds
-svm, tfidf, double, max -> 1940 seconds
-rf, tfidf, double, max -> 80 seconds
-logistic, tfidf, double, max -> 250 seconds /4
-dense_nn, tfidf, double, max -> ?
-dense_nn, doc2vec, double, max ->  2750 seconds /1, /2
-svm, doc2vec, ...
