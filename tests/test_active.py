@@ -9,7 +9,6 @@ from asreviewcontrib.hyperopt.active import main
 from asreviewcontrib.hyperopt.show_trials import load_trials
 
 
-
 def remove_dir(output_dir):
     files = [
         join(output_dir, "best", "embase_labelled", "results_0.h5"),
