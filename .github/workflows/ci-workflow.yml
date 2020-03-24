@@ -41,6 +41,6 @@ jobs:
       run: |
         pip install pytest
         pip install --upgrade setuptools>=41.0.0
-        pip install asreview==${{ matrix.asr_versions }}[all]
+        pip install asreview[all]==${{ matrix.asr_versions }}
         pip install .
         pytest tests
