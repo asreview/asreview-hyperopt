@@ -1,6 +1,6 @@
 ## ASReview-hyperopt
 
-![Deploy and release](https://github.com/msdslab/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)
+![Deploy and release](https://github.com/asreview/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)![Build status](https://github.com/asreview/asreview-hyperopt/workflows/test-suite/badge.svg)
 
 Hyper parameter optimization extension for 
 [ASReview](https://github.com/asreview/asreview). It uses the 
