@@ -40,12 +40,13 @@ class ActiveJobRunner():
     def __init__(self, data_names, model_name, query_name, balance_name,
                  feature_name, executor=serial_executor,
                  n_run=8, n_papers=1502, n_instances=50, n_included=1,
-                 n_excluded=1, server_job=False):
+                 n_excluded=1, server_job=False, data_dir="data",
+                 output_dir=None):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
             query_name=query_name, feature_name=feature_name,
-            hyper_type="active")
+            hyper_type="active", output_dir=output_dir)
 
         self.feature_name = feature_name
         self.balance_name = balance_name
@@ -61,7 +62,7 @@ class ActiveJobRunner():
         self.n_excluded = n_excluded
 
         self.server_job = server_job
-        self.data_dir = "data"
+        self.data_dir = data_dir
         self._cache = {data_name: {"priors": {}}
                        for data_name in data_names}
 

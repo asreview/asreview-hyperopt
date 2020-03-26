@@ -25,8 +25,8 @@ from sklearn.cluster import KMeans
 
 from asreview import ASReviewData
 from asreview.feature_extraction.utils import get_feature_class
-from asreview.cluster import normalized_cluster_score
 
+from asreviewcontrib.hyperopt.cluster_utils import normalized_cluster_score
 from asreviewcontrib.hyperopt.job_utils import get_trial_fp
 from asreviewcontrib.hyperopt.job_utils import get_split_param
 from asreviewcontrib.hyperopt.job_utils import data_fp_from_name
@@ -37,10 +37,12 @@ from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 class ClusterJobRunner():
     def __init__(self, data_names, feature_name, executor=serial_executor,
-                 n_cluster_run=30, n_feature_run=1, server_job=False):
+                 n_cluster_run=30, n_feature_run=1, server_job=False,
+                 data_dir="data", output_dir=None):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
-            data_names, feature_name=feature_name, hyper_type="cluster")
+            data_names, feature_name=feature_name, hyper_type="cluster",
+            output_dir=output_dir)
 
         self.feature_name = feature_name
         self.feature_class = get_feature_class(feature_name)
@@ -49,7 +51,7 @@ class ClusterJobRunner():
         self.executor = executor
         self.n_cluster_run = n_cluster_run
         self.n_feature_run = n_feature_run
-        self.data_dir = "data"
+        self.data_dir = data_dir
         self.server_job = server_job
         self._cache = {data_name: {}
                        for data_name in data_names}
@@ -162,7 +164,8 @@ def loss_from_files(data_fps, labels_fp):
             cur_scores.append(score)
         all_scores.append(cur_scores)
 
-    return -np.exp(np.average(np.log(all_scores)))
+    print(all_scores)
+    return -np.average(all_scores)
 
 
 def create_jobs(param, data_names, n_run):

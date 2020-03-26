@@ -15,6 +15,13 @@ for line in open(path.join("asreviewcontrib", "hyperopt", "__init__.py")):
         exec(line)
         break
 
+DEPS = {
+    'mpi': ['mpi4py'],
+}
+
+DEPS['all'] = DEPS['mpi']
+
+
 setup(
     name='asreview-hyperopt',
     version=__version__,  # noqa
@@ -42,11 +49,10 @@ setup(
     packages=find_namespace_packages(include=['asreviewcontrib.*']),
     namespace_package=["asreview"],
     install_requires=[
-        "asreview>=0.7.0", "numpy", "tqdm", "hyperopt", "sklearn"
+        "asreview>=0.7.0", "numpy", "tqdm", "hyperopt", "sklearn",
     ],
 
-    extras_require={
-    },
+    extras_require=DEPS,
 
     entry_points={
         "asreview.entry_points": [

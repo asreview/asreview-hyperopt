@@ -39,11 +39,13 @@ from asreviewcontrib.hyperopt.serial_executor import serial_executor
 
 class PassiveJobRunner():
     def __init__(self, data_names, model_name, balance_name, feature_name,
-                 executor=serial_executor, n_run=10, server_job=False):
+                 executor=serial_executor, n_run=10, server_job=False,
+                 data_dir="data", output_dir=None):
 
         self.trials_dir, self.trials_fp = get_trial_fp(
             data_names, model_name=model_name, balance_name=balance_name,
-            feature_name=feature_name, hyper_type="passive")
+            feature_name=feature_name, hyper_type="passive",
+            output_dir=output_dir)
 
         self.model_name = model_name
         self.balance_name = balance_name
@@ -57,7 +59,7 @@ class PassiveJobRunner():
         self.data_names = data_names
         self.executor = executor
         self.n_run = n_run
-        self.data_dir = "data"
+        self.data_dir = data_dir
         self._cache = {data_name: {"train_idx": {}}
                        for data_name in data_names}
 
@@ -222,8 +224,9 @@ def compute_train_idx(y, seed):
     one_idx = np.where(y == 1)[0]
     zero_idx = np.where(y == 0)[0]
 
-    n_zero_train = round(0.75*len(zero_idx))
-    n_one_train = round(0.75*len(one_idx))
+    n_zero_train = min(len(zero_idx)-1, max(1, round(0.75*len(zero_idx))))
+    n_one_train = min(len(one_idx)-1, max(1, round(0.75*len(one_idx))))
+
     train_one_idx = np.random.choice(one_idx, n_one_train, replace=False)
     train_zero_idx = np.random.choice(zero_idx, n_zero_train, replace=False)
     train_idx = np.append(train_one_idx, train_zero_idx)
