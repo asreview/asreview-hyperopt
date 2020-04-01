@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import gc
+
 from mpi4py import MPI
 
 
@@ -24,6 +26,7 @@ def mpi_worker(job_runner):
 
         job_runner.execute(**job)
         comm.send(None, dest=0)
+        gc.collect()
     return None, None
 
 
