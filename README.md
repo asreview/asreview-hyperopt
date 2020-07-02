@@ -93,16 +93,16 @@ An example of a structure that has been created:
 output/
 ├── active_learning
 │   ├── nb_max_double_tfidf
-│   │   └── depression_hall_ace_ptsd_nagtegaal
+│   │   └── wilson_hall_ace_ptsd_nagtegaal
 │   │       ├── best
 │   │       │   ├── ace
-│   │       │   ├── depression
+│   │       │   ├── wilson
 │   │       │   ├── hall
 │   │       │   ├── nagtegaal
 │   │       │   └── ptsd
 │   │       ├── current
 │   │       │   ├── ace
-│   │       │   ├── depression
+│   │       │   ├── wilson
 │   │       │   ├── hall
 │   │       │   ├── nagtegaal
 │   │       │   └── ptsd
@@ -122,10 +122,10 @@ output/
 │       │   ├── current
 │       │   │   └── ace
 │       │   └── trials.pkl
-│       ├── depression_hall_ace_ptsd_nagtegaal
+│       ├── wilson_hall_ace_ptsd_nagtegaal
 │       │   └── current
 │       │       ├── ace
-│       │       ├── depression
+│       │       ├── wilson
 │       │       ├── hall
 │       │       ├── nagtegaal
 │       │       └── ptsd
@@ -134,11 +134,11 @@ output/
 │               └── nagtegaal
 └── passive
     └── nb_double_tfidf
-        └── depression
+        └── wilson
             ├── best
-            │   └── depression
+            │   └── wilson
             ├── current
-            │   └── depression
+            │   └── wilson
             └── trials.pkl
 ```
 
