@@ -1,4 +1,6 @@
-## ASReview-hyperopt
+# ❗Highly experimental❗ ASReview-hyperopt
+
+❗ This extension is experimental and works only with old versions of ASReview. Functionality is limited and should be considered "research-only".
 
 ![Deploy and release](https://github.com/asreview/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)![Build status](https://github.com/asreview/asreview-hyperopt/workflows/test-suite/badge.svg)
 
