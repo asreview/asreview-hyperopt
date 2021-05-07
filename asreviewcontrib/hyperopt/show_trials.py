@@ -18,6 +18,10 @@ import pickle
 import pandas as pd
 import numpy as np
 
+import sys
+import os
+
+
 from asreview.entry_points.base import BaseEntryPoint
 
 
@@ -65,4 +69,13 @@ class ShowTrialsEntryPoint(BaseEntryPoint):
         values = load_trials(trials_fp)["values"]
         pd.options.display.max_rows = 999
         pd.options.display.width = 0
-        print(pd.DataFrame(values).sort_values("loss"))
+
+
+        trials_df = pd.DataFrame(values).sort_values("loss")
+
+        # store the trials as a csv file
+        if len(sys.argv) > 3:
+            filepath = os.path.join(sys.argv[3], 'trials.csv')
+            trials_df.to_csv(filepath, index = True, header = True, index_label = "trial")
+
+        print(trials_df)
