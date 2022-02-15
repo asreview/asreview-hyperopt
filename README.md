@@ -2,7 +2,7 @@
 
 ❗ This extension is experimental and works only with old versions of ASReview. Functionality is limited and should be considered "research-only".
 
-[![PyPI version](https://badge.fury.io/py/asreview-hyperopt.svg)](https://badge.fury.io/py/asreview-hyperopt)[![Downloads](https://pepy.tech/badge/asreview-hyperopt)](https://pepy.tech/project/asreview-hyperopt)![PyPI - License](https://img.shields.io/pypi/l/asreview-hyperopt)![Deploy and release](https://github.com/asreview/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg)![Build status](https://github.com/asreview/asreview-hyperopt/workflows/test-suite/badge.svg)
+[![PyPI version](https://badge.fury.io/py/asreview-hyperopt.svg)](https://badge.fury.io/py/asreview-hyperopt) [![Downloads](https://pepy.tech/badge/asreview-hyperopt)](https://pepy.tech/project/asreview-hyperopt) ![PyPI - License](https://img.shields.io/pypi/l/asreview-hyperopt) ![Deploy and release](https://github.com/asreview/asreview-hyperopt/workflows/Deploy%20and%20release/badge.svg) ![Build status](https://github.com/asreview/asreview-hyperopt/workflows/test-suite/badge.svg)
 
 Hyper parameter optimization extension for 
 [ASReview](https://github.com/asreview/asreview). It uses the 
